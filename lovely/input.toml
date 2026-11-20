@@ -37,6 +37,7 @@ jsrshf.outlineRect = jsrshf.outlineRect or function(x, y, w, h)
     color(0)
     love.graphics.rectangle('fill', x, y, w, h)
 end
+
 jsrshf.imgButton = jsrshf.imgButton or function(sprite, x, y, run)
     love.graphics.draw(sprite, x, y)
 
@@ -51,6 +52,52 @@ jsrshf.imgButton = jsrshf.imgButton or function(sprite, x, y, run)
             run()
         end
     end
+end
+
+jsrshf.average = jsrshf.average or function(arr)
+    if #arr == 0 then return 0 end
+
+    local sum = 0
+    for _, value in ipairs(arr) do
+        sum = sum + value
+    end
+
+    return sum / #arr
+end
+
+jsrshf.copyTable = jsrshf.copyTable or function(t)
+    if type(t) ~= "table" then return t end
+    local new = {}
+    for k, v in pairs(t) do
+        if type(v) == "table" then
+            new[k] = copyTable(v)
+        else
+            new[k] = v
+        end
+    end
+    return new
+end
+
+jsrshf.compareTable = jsrshf.compareTable or (a, b)
+    if a == b then return true end
+    if type(a) ~= "table" or type(b) ~= "table" then return false end
+
+    for k, v in pairs(a) do
+        local bv = b[k]
+        if type(v) == "table" and type(bv) == "table" then
+            if not compareTable(v, bv) then
+                return false
+            end
+        elseif v ~= bv then
+            return false
+        end
+    end
+
+    for k in pairs(b) do
+        if a[k] == nil then return false end
+    end
+
+    return true
 end
 '''
 match_indent = true
