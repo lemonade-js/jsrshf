@@ -1,7 +1,7 @@
 {
     "name": "just some random shared helper functions",
     "id": "jsrshf",
-    "version": "1.1",
+    "version": "1.2",
     "author": "gooberlemonade",
     "description": "nativefs and random functions used for inputs and ui stuff",
     "config": {}
