@@ -78,7 +78,7 @@ jsrshf.copyTable = jsrshf.copyTable or function(t)
     return new
 end
 
-jsrshf.compareTable = jsrshf.compareTable or (a, b)
+jsrshf.compareTable = jsrshf.compareTable or function(a, b)
     if a == b then return true end
     if type(a) ~= "table" or type(b) ~= "table" then return false end
 
