@@ -1,0 +1,56 @@
+[manifest]
+version = "1.0.0"
+dump_lua = true
+priority = 3621
+
+
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = '''local gameDirectory = love.filesystem.getSourceBaseDirectory()'''
+position = "before"
+payload = '''
+jsrshf = {
+    nativefs = require("Mods.jsrshf.lib.nativefs"),
+    mouse = {}
+}
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "main.lua"
+pattern = '''function love.update(d)'''
+position = "after"
+payload = '''
+jsrshf.mouse.x = mouse.dx
+jsrshf.mouse.y = mouse.dy
+
+jsrshf.mouse.down = love.mouse.isDown(1) and not jsrshf.mouse._wasDown
+jsrshf.mouse.up = not love.mouse.isDown(1) and jsrshf.mouse._wasDown
+jsrshf.mouse._wasDown = love.mouse.isDown(1)
+
+jsrshf.outlineRect = jsrshf.outlineRect or function(x, y, w, h)
+    color(1)
+    love.graphics.rectangle('fill', x - 1, y - 1, w + 2, h + 2)
+    color(0)
+    love.graphics.rectangle('fill', x, y, w, h)
+end
+jsrshf.imgButton = jsrshf.imgButton or function(sprite, x, y, run)
+    love.graphics.draw(sprite, x, y)
+
+    local w = sprite:getWidth()
+    local h = sprite:getHeight()
+
+    local mx = mouse.rx
+    local my = mouse.ry
+
+    if jsrshf.mouse.down then
+        if mx >= x and mx <= x + w and my >= y and my <= y + h then
+            run()
+        end
+    end
+end
+'''
+match_indent = true
